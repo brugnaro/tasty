@@ -1,7 +1,6 @@
 let conn = require('./db');
 
 module.exports = {
-
   getMenus() {
 
     return new Promise((resolve, reject) => {
