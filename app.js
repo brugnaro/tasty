@@ -8,9 +8,6 @@ var RedisStore = require('connect-redis')(session);
 var formidable = require('formidable');
 var path = require('path');
 
-// var connectRedis = require('connect-redis');
-// var RedisStore = connectRedis(session);
-
 var indexRouter = require('./routes/index');
 var adminRouter = require('./routes/admin');
 
@@ -18,7 +15,9 @@ var app = express();
 
 app.use(function (req, res, next) {
 
-  if (req.method === 'POST') {
+  let content_type = req.headers['content-type']
+
+  if (req.method === 'POST' && content_type.indexOf('multipart/form-data;') > -1) {
 
     var form = formidable.IncomingForm({
       uploadDir: path.join(__dirname, '/public/images'),
@@ -48,7 +47,7 @@ app.set('view engine', 'ejs');
 
 app.use(session({
   store: new RedisStore({
-    host: 'localhost',
+    host: '127.0.0.1',
     port: 6379
   }),
   secret: 'p@ssw0rd',
